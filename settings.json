@@ -1,0 +1,16 @@
+{
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintPath": "pylint",
+    "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint_django"
+    ],
+    "python.linting.pylintUseMinimalCheckers": false,
+    "python.linting.pylintCategorySeverity.convention": "Information",
+    "python.linting.pylintCategorySeverity.refactor": "Information",
+    "python.linting.pylintCategorySeverity.warning": "Warning",
+    "python.linting.pylintCategorySeverity.error": "Error",
+    "python.linting.pylintCategorySeverity.fatal": "Error"
+}
