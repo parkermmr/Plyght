@@ -1,11 +1,13 @@
 import importlib
 
-from util.converters.case import snake_to_pascal
+from util.converters.case import CaseConverter
+
+CASE_CONVERTER = CaseConverter()
 
 
 def configuration(config_type: str, module_path: str = None):
     def decorator(cls):
-        config_class_name = snake_to_pascal(config_type)
+        config_class_name = CASE_CONVERTER.pascal(config_type)
         try:
             mod = (
                 importlib.import_module(module_path)
