@@ -84,8 +84,8 @@ This will ensure the pipeline completes successfully and all code is to an appro
 
 ### Acknowledgments:
 
-<a href="https://github.com/parkermmr/CAB320A1/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=parkermmr/CAB320A1" alt="contrib.rocks image" />
+<a href="https://github.com/parkermmr/kraken/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=parkermmr/kraken" alt="contrib.rocks image" />
 </a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
