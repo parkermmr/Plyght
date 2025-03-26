@@ -1,0 +1,1 @@
+{"config":{"lang":["en"],"separator":"[\\s\\-]+","pipeline":["stopWordFilter"]},"docs":[{"location":"","title":"Basic Documentation Suite for MkDocs","text":"<p>This is an index home page.</p>"}]}
