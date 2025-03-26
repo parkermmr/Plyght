@@ -1,0 +1,49 @@
+name: Python Linting and Testing with Docker Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: parkermmr/compendium/jobs/python/lint-flake8@v1
+        with:
+          python-version: "3.10"
+          src-directory: "plyght"
+
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: parkermmr/compendium/jobs/python/poetry/pytest@v1
+        with:
+          python-version: "3.10"
+          codecov_token: ${{ secrets.CODECOV_TOKEN }}
+  
+  Secure:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: parkermmr/compendium/jobs/security/secure@v1
+        with:
+          languages: "python"
+
+  Publish:
+    needs: [Lint, Test, Secure]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: parkermmr/compendium/jobs/release/publish-docs@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          sha: ${{ github.sha }}
+          ref_name: ${{ github.ref }}
+          branch: "gh-pages"
