@@ -3,7 +3,7 @@ from opensearchpy import OpenSearch
 from config.auto import get_kwargs
 from config.clients.client import Client
 from config.clients.exceptions import ConnectionException
-from util.logging.logger import Logger
+from util.logging.logger import Logger, log_exceptions
 
 
 class OpensearchClient(Client):
@@ -27,6 +27,7 @@ class OpensearchClient(Client):
         self._client = None
 
     @property
+    @log_exceptions
     def client(self) -> OpenSearch:
         """
         Explicitly returns client, opposed to implicity returning client
@@ -87,6 +88,7 @@ class OpensearchClient(Client):
 
         return ", ".join(results)
 
+    @log_exceptions
     def connect(self) -> None:
         """
         Explicit connection method for Opensearch rather than implicitly through the
@@ -105,10 +107,6 @@ class OpensearchClient(Client):
 
         instance = self._client.ping()
         if not instance:
-            self.logger.error(
-                "Failed to connect to Opensearch hosts due to a connection failure"
-                " caused by either an invalid configuration or unreachable host."
-            )
             raise ConnectionException(
                 500,
                 "InvalidConfiguration",
