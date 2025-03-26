@@ -41,7 +41,7 @@ jobs:
       contents: write
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: parkermmr/compendium/jobs/release/publish-docs@v1
+      - uses: parkermmr/compendium/jobs/release/publish-docs@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           sha: ${{ github.sha }}
