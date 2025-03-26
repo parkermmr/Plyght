@@ -1,0 +1,71 @@
+site_name: Plyght
+site_description: Documentation for Plyght
+site_author: Parker
+site_url: https://plyght.teampixl.info
+nav:
+  - Home: index.md
+
+theme:
+  name: material
+  favicon: 'img/favicon.svg'
+  logo: 'img/favicon.svg'
+  custom_dir: docs/overrides
+  features:
+    - header.autohide
+    - search.suggest
+    - content.footnote.tooltips
+
+  palette: 
+    - scheme: default
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [./*-*/src]
+  - markdownextradata
+  - glightbox
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - md_in_html
+  - admonition
+  - neoteroi.timeline
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.snippets:
+      base_path: ["."]
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - markdown_grid_tables
+  - attr_list
+  - footnotes
+
+extra_css:
+  - css/neoteroi-mkdocs.css
+  - css/glightbox.css
+  - css/base.css
+
+extra_javascript:
+  - javascript/glightbox.js

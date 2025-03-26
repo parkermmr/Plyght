@@ -1,10 +1,9 @@
-import os
-import logging
 import inspect
-
-from logging import Logger as BaseLogger
-from typing import Optional, Any
+import logging
+import os
 from functools import wraps
+from logging import Logger as BaseLogger
+from typing import Any, Optional
 
 from plyght.util.logging.formatter import Formatter
 
@@ -15,14 +14,15 @@ class Logger(logging.Logger):
     initiated logs. It uses the dictionary config if available,
     and otherwise attaches a file and a stream handler.
     """
-    LOG_FILE = 'application.log'
+
+    LOG_FILE = "application.log"
 
     def __init__(
         self,
         name: str,
         level: int = logging.INFO,
         logfile: Optional[str] = LOG_FILE,
-        colored: bool = False
+        colored: bool = False,
     ):
         super().__init__(name, level)
         if not self.hasHandlers():
@@ -36,7 +36,8 @@ class Logger(logging.Logger):
         self.propagate = False
 
     def log_user(
-        self, level: int,
+        self,
+        level: int,
         transaction_id: str,
         service: str,
         caller: str,
@@ -45,7 +46,7 @@ class Logger(logging.Logger):
         message: str,
         data_id: Optional[str] = None,
         api_response_code: Optional[int] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         extra = {
             "log_type": "user",
@@ -60,14 +61,15 @@ class Logger(logging.Logger):
         self.log(level, message, extra=extra, **kwargs)
 
     def log_data(
-        self, level: int,
+        self,
+        level: int,
         data_id: str,
         service: str,
         caller: str,
         request_uri: str,
         message: str,
         api_response_code: Optional[int] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         extra = {
             "log_type": "data",
@@ -85,13 +87,14 @@ def log_exceptions(logger: BaseLogger = None):
     Logs exceptions in the format: package.module:line
     Uses self.logger if available, otherwise uses passed logger.
     """
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            instance_logger = getattr(args[0], 'logger', None) if args else None
+            instance_logger = getattr(args[0], "logger", None) if args else None
             active_logger = (
                 instance_logger if isinstance(instance_logger, BaseLogger) else logger
-                )
+            )
 
             try:
                 return func(*args, **kwargs)
@@ -113,9 +116,9 @@ def log_exceptions(logger: BaseLogger = None):
                         if mod_name == "__main__":
                             cwd = os.getcwd()
                             rel_path = os.path.relpath(filename, cwd)
-                            mod_path = (
-                                os.path.splitext(rel_path)[0].replace(os.sep, ".")
-                                )
+                            mod_path = os.path.splitext(rel_path)[0].replace(
+                                os.sep, "."
+                            )
                             mod_name = mod_path
 
                         caller_info = f"{mod_name}:{lineno}"
@@ -124,12 +127,12 @@ def log_exceptions(logger: BaseLogger = None):
                     if active_logger:
                         active_logger.warning(
                             f"Could not inspect call stack: {inspect_error}"
-                            )
+                        )
 
                 if active_logger:
                     active_logger.error(
                         f"Exception in {caller_info}: {e}",
-                        extra={"caller": caller_info}
+                        extra={"caller": caller_info},
                     )
                 else:
                     print(f"[ERROR] Exception in {caller_info}: {e}")

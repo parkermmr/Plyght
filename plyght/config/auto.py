@@ -1,7 +1,6 @@
 import importlib
 import inspect
 
-
 from plyght.util.converters.case import CaseConverter
 
 CASE_CONVERTER = CaseConverter()
@@ -25,6 +24,7 @@ def configuration(config_type: str, module_path: str = None):
             raise ImportError(msg) from e
         cls._config = config_class()
         return cls
+
     return decorator
 
 

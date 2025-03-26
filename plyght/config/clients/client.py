@@ -14,10 +14,8 @@ class Client(ABC):
         arguments may be captured for flexibility in subclassing.
         """
         self._config = (
-            kwargs | self._config.dump()
-            if hasattr(self, '_config')
-            else kwargs
-            )
+            kwargs | self._config.dump() if hasattr(self, "_config") else kwargs
+        )
 
     @property
     @abstractmethod

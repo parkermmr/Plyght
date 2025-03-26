@@ -15,6 +15,7 @@ class Case(Enum):
     """
     Enumeration of supported string cases.
     """
+
     SNAKE = "snake"
     PASCAL = "pascal"
     CAMEL = "camel"

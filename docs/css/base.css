@@ -1,0 +1,92 @@
+:root {
+    --fp-red:#C11;
+    --fp-orange:#D51;
+    --fp-yellow:#B81;
+    --fp-green:#161;
+    --fp-blue:#167;
+    --fp-purple:rgb(65, 17, 119);
+    --fp-neutral-box: lightgrey;
+    --fp-black:rgb(0, 0, 0);
+}
+
+.epic-timeline .nt-timeline-dot .icon {
+    /* color: white; */
+    /* background: rgb(180, 20, 20); */
+    border-radius: 50%;
+}
+
+.nt-timeline-dot.bigger {
+    width: 60px;
+    height: 60px;
+}
+
+.nt-timeline.vertical.left .nt-timeline-dot.bigger {
+    top: -10px;
+    left: 0px;
+}
+
+.nt-timeline-dot.fp-timeline.bigger {
+    background-color: rgb(7, 112, 187);
+    /* background-color: rgb(73, 175, 248); */
+    border-color: rgb(73, 175, 248);
+}
+
+/* https://github.com/squidfunk/mkdocs-material/discussions/6165 */
+.status-pill {
+    background-color: rgb(164, 164, 164);
+    border: none;
+    color: white;
+    padding: 2px 7px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;
+    font-size: 0.85em;
+    margin: 0px 3px;
+    text-transform: uppercase;
+}
+
+/* Admonitions */
+.md-typeset .admonition.overview-extendable,
+.md-typeset details.overview-extendable {
+  border-color: var(--fp-red);
+  border-width: 4px;
+}
+.md-typeset .admonition.overview-tech-agnostic,
+.md-typeset details.overview-extendable {
+  border-color: var(--fp-orange);
+  border-width: 4px;
+}
+.md-typeset .admonition.overview-multi-pipeline,
+.md-typeset details.overview-extendable {
+  border-color: var(--fp-yellow);
+  border-width: 4px;
+}
+.md-typeset .admonition.overview-data-service,
+.md-typeset details.overview-extendable {
+  border-color: var(--fp-green);
+  border-width: 4px;
+}
+.md-typeset .admonition.overview-framework,
+.md-typeset details.overview-extendable {
+  border-color: var(--fp-blue);
+  border-width: 4px;
+}
+
+.md-typeset .admonition.overview-outline,
+.md-typeset details.overview-extendable {
+  border-color: var(--fp-black);
+  border-width: 3px;
+}
+
+/* Content Tabs - Adding left-outlines for clarity */
+.md-typeset .tabbed-content {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-left: 4px solid var(--md-default-fg-color);
+}
+
+/* Inverting light/dark */
+[data-md-color-scheme="slate"] .fp-dark-invert {
+  filter: invert(100%) hue-rotate(180deg);
+}

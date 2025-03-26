@@ -7,4 +7,5 @@ def invoke(*dargs, **dkwargs):
     def decorator(func):
         func(*dargs, **dkwargs)
         return func
+
     return decorator

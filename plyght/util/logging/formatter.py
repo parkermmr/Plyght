@@ -9,13 +9,14 @@ class Formatter(logging.Formatter):
     when desired, and strips ANSI codes for file logging. Extra arguments
     are appended if no '%' placeholders are present.
     """
-    ANSI_ESCAPE = re.compile(r'\x1b\[[0-9;]*m')
+
+    ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*m")
 
     def __init__(self, colored: bool = False):
         super().__init__(
             fmt="%(asctime)s - %(levelname)s - %(message)s",
             datefmt="%Y-%m-%dT%H:%M:%SZ",
-            style='%'
+            style="%",
         )
         self.colored = colored
         logging.Formatter.converter = time.gmtime

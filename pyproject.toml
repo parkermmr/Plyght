@@ -34,3 +34,24 @@ boto       = ["boto3>=1.37.20"]
 pytest = "^8.3.3"
 pytest-asyncio = "^0.21.0"
 flake8 = "^7.1.2"
+black = "^25.1.0"
+isort = "^6.0.1"
+
+[tool.black]
+exclude = '''
+/(
+    mirror
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+skip = ["mirror"]

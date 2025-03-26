@@ -5,7 +5,7 @@ except ImportError:
         "Opensearch functionality requires installation with the [opensearch] extra."
         " Please see installation instructions for the package extras at:"
         " https://plyght.teampixl.info/install"
-        )
+    )
 
 from plyght.config.auto import get_kwargs
 from plyght.config.clients.client import Client
@@ -24,11 +24,7 @@ class OpensearchClient(Client):
         https://plyght.teampixl.info/config/clients/opensearch
     """
 
-    def __init__(
-            self,
-            hosts: list[dict] = None,
-            **kwargs
-            ) -> None:
+    def __init__(self, hosts: list[dict] = None, **kwargs) -> None:
         super().__init__(**get_kwargs())
         self.logger = Logger(self.__class__.__name__)
         self._client = None
@@ -47,7 +43,7 @@ class OpensearchClient(Client):
                 404,
                 "NoConnectionFound",
                 "Connection to Opensearch not yet established, try"
-                " OpensearchClient.connect()."
+                " OpensearchClient.connect().",
             )
         return self._client
 
@@ -60,9 +56,7 @@ class OpensearchClient(Client):
         :return: Boolean of connection state.
         """
         if not self._client:
-            self.logger.warning(
-                "No active connection to Opensearch is established."
-            )
+            self.logger.warning("No active connection to Opensearch is established.")
             return False
 
         return True
@@ -75,19 +69,17 @@ class OpensearchClient(Client):
 
         :return: String of host URLs or None if no hosts are configured.
         """
-        ssl = self._config.get('use_ssl', False)
+        ssl = self._config.get("use_ssl", False)
         scheme = "https" if ssl else "http"
-        hosts_data = self._config.get('hosts', [])
+        hosts_data = self._config.get("hosts", [])
 
         if not hosts_data:
-            self.logger.warning(
-                "No hosts found for Opensearch client."
-            )
+            self.logger.warning("No hosts found for Opensearch client.")
             return None
 
         results = []
         for item in hosts_data:
-            url_prefix = item.get('url_prefix', '')
+            url_prefix = item.get("url_prefix", "")
             if url_prefix:
                 results.append(f"{scheme}://{item['host']}:{item['port']}/{url_prefix}")
             else:
@@ -104,13 +96,9 @@ class OpensearchClient(Client):
         if self._client is not None:
             return
 
-        self.logger.info(
-            f"Attempting to establish connection to clients: {self.host}"
-        )
+        self.logger.info(f"Attempting to establish connection to clients: {self.host}")
 
-        self._client = OpenSearch(
-            **self._config
-        )
+        self._client = OpenSearch(**self._config)
 
         instance = self._client.ping()
         if not instance:
@@ -118,7 +106,7 @@ class OpensearchClient(Client):
                 500,
                 "InvalidConfiguration",
                 "Connection to Opensearch client cannot be established"
-                " caused by either an invalid configuration or unreachable host."
+                " caused by either an invalid configuration or unreachable host.",
             )
 
     def disconnect(self) -> None:
