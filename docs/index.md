@@ -1,5 +1,8 @@
-# Basic Documentation Suite for MkDocs
-
+---
+hide:
+  - navigation
+  - toc
+icon: material/home
 ---
 
-This is an index home page.
+Welcome to the Plyght home page.
