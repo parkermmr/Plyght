@@ -30,7 +30,6 @@ theme:
     - navigation.tabs
     - navigation.top
     - navigation.tracking
-
   palette: 
     - scheme: default
       toggle:

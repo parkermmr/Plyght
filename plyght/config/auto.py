@@ -24,6 +24,7 @@ def configuration(config_type: str, module_path: str = None):
     :param module_path: Optional module path to import the configuration class from.
     :return: Decorator function.
     """
+
     def decorator(cls):
         config_class_name = CASE_CONVERTER.pascal(config_type)
         try:
