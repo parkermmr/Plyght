@@ -1,17 +1,24 @@
+"""
+Defines an abstract client class that provides a core interface for client wrappers.
+Subclasses must implement the connection handling methods and reference an underlying
+client object.
+"""
+
 from abc import ABC, abstractmethod
 
 
 class Client(ABC):
     """
-    Abstract client class that defines the core interface for client wrappers.
-    Subclasses should provide implementations for connection handling and
-    reference to an underlying client.
+    Abstract client class for implementing wrappers around external services.
+    Subclasses must define how to connect, disconnect, and expose connection
+    properties. The _config attribute can be set externally or inherited from
+    a configuration decorator.
     """
 
     def __init__(self, **kwargs):
         """
-        Initialize the client with an optional config dictionary. Additional keyword
-        arguments may be captured for flexibility in subclassing.
+        Initialize the client with an optional config dictionary. Additional
+        keyword arguments are stored in _config, allowing subclass flexibility.
         """
         self._config = (
             kwargs | self._config.dump() if hasattr(self, "_config") else kwargs
@@ -30,8 +37,8 @@ class Client(ABC):
     @abstractmethod
     def status(self):
         """
-        Return the current connection status.
-        Subclasses may override to provide more detailed information.
+        Return the current connection status. Subclasses may override with
+        more detailed information.
         """
         pass
 
@@ -39,7 +46,8 @@ class Client(ABC):
     @abstractmethod
     def host(self):
         """
-        Return the host address from the client configuration if provided.
+        Return the host address from the client configuration, if specified.
+        Must be implemented by subclasses.
         """
         pass
 
