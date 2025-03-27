@@ -1,10 +1,17 @@
+"""
+Provides an OpenSearch client wrapper that integrates Plyght logging and
+exception handling. The class is intended for use as a base class where
+configuration can be injected via decorators. It includes explicit
+methods for connecting and disconnecting, along with property-based
+status checking and host retrieval.
+"""
+
 try:
     from opensearchpy import OpenSearch
 except ImportError:
     raise ImportError(
-        "Opensearch functionality requires installation with the [opensearch] extra."
-        " Please see installation instructions for the package extras at:"
-        " https://plyght.teampixl.info/install"
+        "Opensearch functionality requires installation with the [opensearch] extra. "
+        "See https://plyght.teampixl.info/install for details on installing extras."
     )
 
 from plyght.config.auto import get_kwargs
@@ -15,16 +22,20 @@ from plyght.util.logging.logger import Logger, log_exceptions
 
 class OpensearchClient(Client):
     """
-    OpenSearch wrapper client class which improves the logging and exception handling
-    for the Opensearch Python client. This class is intended to be a base class,
-    used as an inheritor using the @plyght.config.auto.configuration decorator.
-    Otherwise, the client can be instantiated like a normal OpenSearch client.
+    Wrapper class for the OpenSearch Python client. Provides additional logging
+    and exception handling and can be decorated for automatic configuration
+    using Plyght's configuration system.
+
     For more information on Plyght configurations see:
         https://plyght.teampixl.info/config/intro,
         https://plyght.teampixl.info/config/clients/opensearch
     """
 
     def __init__(self, hosts: list[dict] = None, **kwargs) -> None:
+        """
+        Initialize the OpensearchClient, optionally with a list of host dictionaries.
+        Other keyword arguments are merged with existing configuration if present.
+        """
         super().__init__(**get_kwargs())
         self.logger = Logger(self.__class__.__name__)
         self._client = None
