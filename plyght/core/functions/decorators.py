@@ -1,3 +1,10 @@
+"""
+This module provides decorators for immediate function invocation and for
+issuing deprecation warnings. The `invoke` decorator can call a function
+immediately with given arguments, and the `deprecated` decorator marks
+functions or classes as deprecated, emitting warnings when called.
+"""
+
 from functools import wraps
 import inspect
 import warnings
@@ -7,10 +14,20 @@ STRING_TYPES = (type(b''), type(u''))
 
 def invoke(*dargs, **dkwargs):
     """
-    This is a decorator that results in the immediate invocation
-    of the decorated function. The decorator args and kwargs will
-    be passed to the function. Else the decorator can just be called
-    without arguments if the function does not require them.
+    Decorator that immediately invokes the decorated function with the provided
+    arguments. If no arguments are specified for the decorator, it simply calls
+    the decorated function once. Otherwise, it calls the function using the
+    given decorator arguments.
+
+    Usage:
+        @invoke
+        def some_function():
+            print("Called immediately")
+
+        # Or with arguments:
+        @invoke("arg1", key="value")
+        def another_function(arg1, key=None):
+            print(f"{arg1}, {key}")
     """
     if len(dargs) == 1 and callable(dargs[0]) and not dkwargs:
         func = dargs[0]
@@ -26,20 +43,29 @@ def invoke(*dargs, **dkwargs):
 
 def deprecated(reason):
     """
-    This is a decorator which can be used to mark functions
-    as deprecated. It will result in a warning being emitted
-    when the function is used. The decorator can either recieve
-    a string reason and that be conveyed, or just a regular deprecation
-    warning.
+    Decorator that marks a function or class as deprecated, emitting a
+    DeprecationWarning when it is called. The decorator can accept either
+    a string providing the reason for deprecation, or be applied directly
+    to a function or class.
 
-    This functionality is outlined as part of PEP 702 as implementation
-    in the Python standard lib: 'warnings'.
+    Usage:
+        # With a reason:
+        @deprecated("Use the new_function instead.")
+        def old_function():
+            pass
+
+        # Without a reason (using directly):
+        @deprecated
+        def another_old_function():
+            pass
+
+    :param reason: Either a string describing why the entity is deprecated,
+                   or the function/class being marked as deprecated.
+    :raises TypeError: If 'reason' is not a string, function, or class.
     """
-
     if isinstance(reason, STRING_TYPES):
 
         def decorator(func1):
-
             if inspect.isclass(func1):
                 fmt1 = "Call to deprecated class {name} ({reason})."
             else:
@@ -61,7 +87,6 @@ def deprecated(reason):
         return decorator
 
     elif inspect.isclass(reason) or inspect.isfunction(reason):
-
         func2 = reason
 
         if inspect.isclass(func2):
