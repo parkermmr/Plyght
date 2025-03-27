@@ -1,3 +1,9 @@
+"""
+This module provides a custom logging.Formatter subclass that supports
+user/data log formatting, optional ANSI color injection, and automatic
+ANSI code stripping for file logs.
+"""
+
 import logging
 import re
 import time
@@ -5,14 +11,22 @@ import time
 
 class Formatter(logging.Formatter):
     """
-    Custom formatter that applies user/data formats, injects ANSI colors
-    when desired, and strips ANSI codes for file logging. Extra arguments
-    are appended if no '%' placeholders are present.
+    A custom logging formatter that applies specialized formats for user-
+    and data-related logs, optionally includes ANSI colors, and strips
+    ANSI escape codes when colors are not desired.
+
+    If a log record contains extra arguments with no '%' placeholders, those
+    arguments are appended to the log message string.
     """
 
     ANSI_ESCAPE = re.compile(r"\x1b\[[0-9;]*m")
 
     def __init__(self, colored: bool = False):
+        """
+        Initialize the Formatter instance.
+
+        :param colored: If True, ANSI color codes will be added to the log output.
+        """
         super().__init__(
             fmt="%(asctime)s - %(levelname)s - %(message)s",
             datefmt="%Y-%m-%dT%H:%M:%SZ",
@@ -20,6 +34,7 @@ class Formatter(logging.Formatter):
         )
         self.colored = colored
         logging.Formatter.converter = time.gmtime
+
         self.user_fmt = (
             "%(asctime)s - %(levelname)s - [TX: %(transaction_id)s] "
             "- [Service: %(service)s] - [Caller: %(caller)s] "
@@ -33,7 +48,21 @@ class Formatter(logging.Formatter):
         self.default_fmt = "%(asctime)s - %(levelname)s - %(message)s"
 
     def format(self, record: logging.LogRecord) -> str:
+        """
+        Format the specified log record as text.
 
+        If record.args is non-empty and there are no '%' placeholders in
+        record.msg, the args are appended to the message.
+
+        Determines the format string based on whether the record indicates a
+        user or data event. If an api_response_code is present, that is also
+        included. If colored output is enabled, ANSI color codes are applied
+        to the log level name. For non-colored output, any ANSI codes are
+        stripped before returning the final log message.
+
+        :param record: The log record to format.
+        :return: Formatted log record as a string.
+        """
         if record.args and "%" not in record.msg:
             extra = " ".join(str(arg) for arg in record.args)
             record.msg = f"{record.msg} {extra}"
@@ -43,6 +72,7 @@ class Formatter(logging.Formatter):
             fmt = self.user_fmt if record.log_type == "user" else self.data_fmt
         else:
             fmt = self.default_fmt
+
         if getattr(record, "api_response_code", None) is not None:
             fmt += " - [Response: %(api_response_code)s]"
         self._style._fmt = fmt
@@ -67,4 +97,5 @@ class Formatter(logging.Formatter):
 
         if not self.colored:
             output = self.ANSI_ESCAPE.sub("", output)
+
         return output
