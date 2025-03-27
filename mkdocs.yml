@@ -5,15 +5,31 @@ site_url: https://plyght.teampixl.info
 nav:
   - Home: index.md
 
+repo_name: Plyght
+repo_url: https://github.com/parkermmr/plyght
+
 theme:
   name: material
-  favicon: 'img/favicon.svg'
-  logo: 'img/favicon.svg'
+  favicon: 'img/logo.png'
+  logo: 'img/logo.png'
+  language: en
   custom_dir: docs/overrides
   features:
     - header.autohide
     - search.suggest
+    - search.hightlight
+    - search.share
     - content.footnote.tooltips
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - announce.dismiss
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - navigation.tracking
 
   palette: 
     - scheme: default
