@@ -7,6 +7,7 @@
     --fp-purple:rgb(65, 17, 119);
     --fp-neutral-box: lightgrey;
     --fp-black:rgb(0, 0, 0);
+    --md-code-font: "JetBrains Mono", monospaced;
 }
 
 .epic-timeline .nt-timeline-dot .icon {
@@ -89,4 +90,46 @@
 /* Inverting light/dark */
 [data-md-color-scheme="slate"] .fp-dark-invert {
   filter: invert(100%) hue-rotate(180deg);
+}
+
+@font-face {
+  font-family: "Figtree";
+  src: url("../fonts/Figtree-VariableFont_wght.ttf");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono-VariableFont_wght.ttf");
+}
+
+.md-typeset h1, h2, h3, h4 {
+  font-family: Figtree, serif;
+  font-weight: 500 !important;
+}
+
+.md-nav__item--section > .md-nav__link {
+  font-family: Figtree, serif;
+  font-weight: 500;
+}
+
+.md-banner {
+  background-color: #fff2cc;
+  color: #000000;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  height: 32px;
+}
+
+.md-banner__inner {
+  font-size: unset;
+  line-height: unset;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.md-classification {
+  margin-top: 10px;
 }
