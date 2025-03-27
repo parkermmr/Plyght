@@ -1,3 +1,9 @@
+"""
+This module provides a specialized Logger class with advanced logging functionality,
+along with a decorator to log exceptions. The Logger class extends Python's built-in
+logging.Logger, providing additional methods to log user- and data-related events.
+"""
+
 import inspect
 import logging
 import os
@@ -8,11 +14,16 @@ from typing import Any, Optional
 from plyght.util.logging.formatter import Formatter
 
 
-class Logger(logging.Logger):
+class Logger(BaseLogger):
     """
-    A logger subclass that provides methods for user- and data-
-    initiated logs. It uses the dictionary config if available,
-    and otherwise attaches a file and a stream handler.
+    A logger subclass that provides methods for user- and data-initiated logs.
+    Uses the dictionary config if available, or attaches both a file and a stream
+    handler.
+
+    :param name: Name for this logger.
+    :param level: Logging level. Defaults to logging.INFO.
+    :param logfile: Optional log file name/path. Defaults to 'application.log'.
+    :param colored: Whether log output should use colored formatting. Defaults to False.
     """
 
     LOG_FILE = "application.log"
@@ -24,15 +35,26 @@ class Logger(logging.Logger):
         logfile: Optional[str] = LOG_FILE,
         colored: bool = False,
     ):
+        """
+        Initialize the Logger instance.
+
+        :param name: Name for this logger.
+        :param level: Logging level. Defaults to logging.INFO.
+        :param logfile: Optional log file name/path. Defaults to 'application.log'.
+        :param colored: Whether log output should use colored formatting.
+                         Defaults to False.
+        """
         super().__init__(name, level)
         if not self.hasHandlers():
             if logfile:
                 file_handler = logging.FileHandler(logfile)
                 file_handler.setFormatter(Formatter(colored=False))
                 self.addHandler(file_handler)
+
             stream_handler = logging.StreamHandler()
             stream_handler.setFormatter(Formatter(colored=colored))
             self.addHandler(stream_handler)
+
         self.propagate = False
 
     def log_user(
@@ -48,6 +70,20 @@ class Logger(logging.Logger):
         api_response_code: Optional[int] = None,
         **kwargs: Any,
     ) -> None:
+        """
+        Log a user event with additional metadata.
+
+        :param level: Logging level (e.g., logging.INFO).
+        :param transaction_id: Unique transaction identifier.
+        :param service: Name of the service or module logging this event.
+        :param caller: The calling method or function.
+        :param user_id: Identifier for the user triggering the event.
+        :param request_uri: URI of the request causing this log.
+        :param message: Human-readable log message.
+        :param data_id: Optional identifier for associated data.
+        :param api_response_code: Optional HTTP response code or similar.
+        :param kwargs: Additional keyword arguments for the log method.
+        """
         extra = {
             "log_type": "user",
             "transaction_id": transaction_id,
@@ -71,6 +107,18 @@ class Logger(logging.Logger):
         api_response_code: Optional[int] = None,
         **kwargs: Any,
     ) -> None:
+        """
+        Log a data event with additional metadata.
+
+        :param level: Logging level (e.g., logging.INFO).
+        :param data_id: Unique identifier of the data being logged.
+        :param service: Name of the service or module logging this event.
+        :param caller: The calling method or function.
+        :param request_uri: URI of the request causing this log.
+        :param message: Human-readable log message.
+        :param api_response_code: Optional HTTP response code or similar.
+        :param kwargs: Additional keyword arguments for the log method.
+        """
         extra = {
             "log_type": "data",
             "data_id": data_id,
@@ -84,8 +132,12 @@ class Logger(logging.Logger):
 
 def log_exceptions(logger: BaseLogger = None):
     """
-    Logs exceptions in the format: package.module:line
-    Uses self.logger if available, otherwise uses passed logger.
+    Decorator to log exceptions in the format: package.module:line.
+    Uses logger from the class instance if available, otherwise
+    uses the logger passed in.
+
+    :param logger: Optional logger to use if no logger is found on the instance.
+    :return: Decorated function that logs any raised exceptions.
     """
 
     def decorator(func):
