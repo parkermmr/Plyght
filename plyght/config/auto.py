@@ -1,3 +1,9 @@
+"""
+Provides decorators for automatically attaching configuration classes and
+for extracting caller keyword arguments. This module leverages a
+CaseConverter for dynamically resolving configuration class names.
+"""
+
 import importlib
 import inspect
 
@@ -7,6 +13,17 @@ CASE_CONVERTER = CaseConverter()
 
 
 def configuration(config_type: str, module_path: str = None):
+    """
+    Decorator that attaches a configuration class to the decorated class
+    at runtime. The configuration class name is derived from the provided
+    config_type by converting it to PascalCase. By default, the configuration
+    class is searched for in the same module as the decorated class, but
+    an alternate module may be specified.
+
+    :param config_type: Identifies the configuration type as a string.
+    :param module_path: Optional module path to import the configuration class from.
+    :return: Decorator function.
+    """
     def decorator(cls):
         config_class_name = CASE_CONVERTER.pascal(config_type)
         try:
@@ -30,10 +47,11 @@ def configuration(config_type: str, module_path: str = None):
 
 def get_kwargs():
     """
-    Use Python's inspect to get a dict of the caller's local variables.
-    Flatten out any 'kwargs' so that they become top-level items.
-    Returns a dictionary where keys are parameter names and values are
-    whatever was passed in at call time, excluding 'self'.
+    Inspect the caller's local variables, excluding 'self' and '__class__',
+    and flatten any 'kwargs' dictionary into top-level items. Returns a
+    dictionary of these flattened parameters.
+
+    :return: Dictionary of caller's local variables, merged with kwargs.
     """
     frame = inspect.currentframe().f_back
     local_vars = frame.f_locals.copy()
