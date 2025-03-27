@@ -74,7 +74,7 @@ To get started it best you follow the introductory guide at [Plyght](https://ply
 
 ### Prerequisites
 This project relies on Python, Poetry, and Git. Apart from those, that's it! It is important that the correct versions of Python and Poetry are installed, otherwise all the dependencies are managed in the `pyptoject.toml` file at the root directory. The below version are relevant to the project:
-```toml
+```python
 python=^3.13
 poetry=^2.0.0
 ```
