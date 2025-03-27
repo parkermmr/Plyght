@@ -55,7 +55,7 @@
 </details>
 
 ## About The Project
-
+Plyght is an open-source lightweight Python utility library that provides extended capability for client services configurations, function decorations, advanced logging, format converters, and more. The premise of Plyght is to improve exisiting functionality and enhance the developer experience and readbility of code. Plyght is an opinionated Python library, prefering explicit, declarative programming. In general, its implementations are stand alone, but are best served using the entire application framework.
 
 ### Built With
 
@@ -70,10 +70,44 @@
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Getting Started
+To get started it best you follow the introductory guide at [Plyght](https://plyght.teampixl.info/getting-started).
 
 ### Prerequisites
+This project relies on Python, Poetry, and Git. Apart from those, that's it! It is important that the correct versions of Python and Poetry are installed, otherwise all the dependencies are managed in the `pyptoject.toml` file at the root directory. The below version are relevant to the project:
+```toml
+python=^3.13
+poetry=^2.0.0
+```
+Additionally, the package is planned to be released on PyPi as an installation which can be done directly through poetry, pip, or any other Python package manager; opposed to installation direct from source.
 
 ### Installation
+The installation of Plyght can be done through the pip or poetry using the `pyproject.toml`. Additionally, if the installation requires additional supporting functionality such as Kafka, Neo4j, OpenSearch et al, you will need to specify those in the installation step.
+
+<details>
+<summary>Poetry</summary>
+
+```bash
+#Installing without additional dependencies.
+poetry install
+
+#Installing with additional depedencies.
+poetry install --extras "neo4j kafka ..."
+```
+
+</details>
+
+<details>
+<summary>Pip</summary>
+
+```bash
+#Installing without additional dependencies.
+pip install .
+
+#Installing with additional depedencies.
+poetry install "[neo4j,kafka,...]"
+```
+
+</details>
 
 ### Compendium CI
 The current workflow being used is a Compendium CI Python Poetry pipeline with comprehensive checks for testing, linting, style, code security and structure. Compendium is a GitHub specific CI suite fully managed [here][compendium]. It is important that before any pushes are made the code quality checks and reformatting are ran. This can be done with the following commands:
