@@ -1,6 +1,7 @@
 """
-This module defines the BaseConfig abstract class, which extends the Mapping interface
-for reading configuration data from an underlying dictionary-like object.
+Defines the BaseConfig abstract class, which extends the Mapping interface
+for reading configuration data from a dictionary-like object. Subclasses
+must implement the dump method to provide access to the underlying data.
 """
 
 from abc import ABC, abstractmethod
@@ -9,9 +10,8 @@ from collections.abc import Mapping
 
 class BaseConfig(ABC, Mapping):
     """
-    Abstract base class for configuration objects.
-    Subclasses must implement the dump method to provide
-    access to an internal dictionary-like data structure.
+    Abstract base class for configuration objects. Subclasses must implement
+    the dump method, returning the underlying data as a dictionary-like object.
     """
 
     @abstractmethod
@@ -24,7 +24,7 @@ class BaseConfig(ABC, Mapping):
 
     def __getitem__(self, key):
         """
-        Return the value associated with the specified key.
+        Retrieve the value associated with the given key from the configuration.
         """
         return self.dump()[key]
 
