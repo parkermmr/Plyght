@@ -9,7 +9,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/parkermmr/plyght">
-    <img src="docs/img/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/parkermmr/Plyght/blob/main/docs/img/logo.png?raw=true" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Plyght</h3>
