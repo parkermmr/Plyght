@@ -74,7 +74,7 @@ To get started it best you follow the introductory guide at [Plyght](https://ply
 
 ### Prerequisites
 This project relies on Python, Poetry, and Git. Apart from those, that's it! It is important that the correct versions of Python and Poetry are installed, otherwise all the dependencies are managed in the `pyptoject.toml` file at the root directory. The below version are relevant to the project:
-```toml
+```python
 python=^3.13
 poetry=^2.0.0
 ```
@@ -112,7 +112,7 @@ poetry install "[neo4j,kafka,...]"
 ### Compendium CI
 The current workflow being used is a Compendium CI Python Poetry pipeline with comprehensive checks for testing, linting, style, code security and structure. Compendium is a GitHub specific CI suite fully managed [here][compendium]. It is important that before any pushes are made the code quality checks and reformatting are ran. This can be done with the following commands:
 ```bash
-poetry run black src && poetry run isort src
+poetry run black plyght && poetry run isort plyght
 ```
 This will ensure the pipeline completes successfully and all code is to an appropriate format standard. For more information on the linting configuration seek out the `pyproject.toml` configuration under `[tools.black]` & `[tools.isort]` as well as the `.flake8` configuration file.
 
