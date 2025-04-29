@@ -30,3 +30,27 @@ class ConnectionException(Exception):
         status code, and info message.
         """
         return f"{self.error_type} - {self.status_code} - {self.info}"
+
+
+class QueryException(Exception):
+    """
+    Overrides the base exception to offer additional details for
+    query-related errors.
+    """
+
+    def __init__(self, error_type: str, info: str):
+        """
+        Initialize the exception with a status code, an error type, and a message.
+
+        :param error_type: String identifying the type of error.
+        :param info: Additional information describing the error.
+        """
+        self.error_type = error_type
+        self.info = info
+        super().__init__(f"{self.error_type} - {self.info}")
+
+    def __str__(self):
+        """
+        Return a string representation that includes the error type and info message.
+        """
+        return f"{self.error_type} - {self.info}"
