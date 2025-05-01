@@ -10,6 +10,7 @@ from plyght.config.auto import get_kwargs
 from plyght.config.clients.client import Client
 from plyght.config.clients.exceptions import ConnectionException, QueryException
 from plyght.util.logging.logger import Logger, log_exceptions
+from async_property import async_property
 
 
 class Neo4jClient(Client):
@@ -70,21 +71,13 @@ class Neo4jClient(Client):
 
         :return: String of host URLs or None if no hosts are configured.
         """
-        uri = self._config.get("uri", [])
+        uri = self._config.get("uri", "")
 
         if not uri:
             self.logger.warning("No hosts found for Neo4j client.")
             return None
 
-        results = []
-        for item in uri:
-            url_prefix = item.get("url_prefix", "")
-            if url_prefix:
-                results.append(f"{item['host']}/{url_prefix}")
-            else:
-                results.append(item['host'])
-
-        return ", ".join(results)
+        return uri
 
     @log_exceptions
     def connect(self) -> None:
@@ -97,7 +90,7 @@ class Neo4jClient(Client):
 
         self.logger.info(f"Attempting to establish connection to clients: {self.host}")
 
-        self._client = AsyncGraphDatabase(**self._config)
+        self._client = AsyncGraphDatabase.driver(**self._config)
 
         instance = self._client
         if not instance:
@@ -171,7 +164,6 @@ class Neo4jClient(Client):
                 "Connection to Neo4j not yet established, try"
                 " Neo4jClient.connect().",
             )
-
         cypher = "CALL n10s.rdf.export.cypher($query, $config)"
         result = await self.execute_safe_query(
             cypher,
@@ -183,4 +175,10 @@ class Neo4jClient(Client):
                 }
             }
         )
+        return result
+
+    @async_property
+    async def labels(self):
+        query = "CALL db.labels() YIELD label RETURN label as labels"
+        result = await self.execute_safe_query(query=query)
         return result
