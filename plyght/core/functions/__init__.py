@@ -1,7 +1,3 @@
-from .decorators import invoke, deprecated
+from .decorators import deprecated, invoke
 
-
-__all__ = [
-    "invoke",
-    "deprecated"
-]
+__all__ = ["invoke", "deprecated"]

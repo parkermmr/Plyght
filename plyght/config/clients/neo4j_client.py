@@ -1,16 +1,17 @@
 try:
-    from neo4j import AsyncGraphDatabase, AsyncDriver
+    from neo4j import AsyncDriver, AsyncGraphDatabase
 except ImportError:
     raise ImportError(
         "Neo4j functionality requires installation with the [neo4j] extra. "
         "See https://plyght.teampixl.info/install for details on installing extras."
     )
 
+from async_property import async_property
+
 from plyght.config.auto import get_kwargs
 from plyght.config.clients.client import Client
 from plyght.config.clients.exceptions import ConnectionException, QueryException
 from plyght.util.logging.logger import Logger, log_exceptions
-from async_property import async_property
 
 
 class Neo4jClient(Client):
@@ -23,6 +24,7 @@ class Neo4jClient(Client):
         https://plyght.teampixl.info/config/intro,
         https://plyght.teampixl.info/config/clients/neo4j
     """
+
     def __init__(self, uri: str = None, auth: tuple[str, str] = None, **kwargs) -> None:
         """
         Initialize the Neo4jClient, optionally with a uri and auth tuple.
@@ -142,11 +144,8 @@ class Neo4jClient(Client):
                 )
 
     async def export_rdf(
-            self,
-            query: str,
-            params: dict | None = None,
-            format: str = "Turtle"
-            ):
+        self, query: str, params: dict | None = None, format: str = "Turtle"
+    ):
         """
         Generic exportation wrapper for n10s RDF formatted data.
 
@@ -169,11 +168,8 @@ class Neo4jClient(Client):
             cypher,
             {
                 "cypherQuery": query,
-                "config": {
-                    "format": format,
-                    "cypherParams": params
-                }
-            }
+                "config": {"format": format, "cypherParams": params},
+            },
         )
         return result
 

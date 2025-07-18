@@ -10,8 +10,9 @@ import os
 from functools import wraps
 from logging import Logger as BaseLogger
 from typing import Any, Optional
-from plyght.util.logging.json_formatter import JsonFormatter
+
 from plyght.util.logging.formatter import Formatter
+from plyght.util.logging.json_formatter import JsonFormatter
 
 
 class Logger(BaseLogger):
@@ -25,6 +26,7 @@ class Logger(BaseLogger):
     :param logfile: Optional log file name/path. Defaults to 'application.log'.
     :param colored: Whether log output should use colored formatting. Defaults to False.
     """
+
     LOG_SCHEMA = {
         "ts": "@time",
         "level": "@level",

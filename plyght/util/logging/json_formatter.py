@@ -45,9 +45,9 @@ class JsonFormatter(logging.Formatter):
             ).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "@level": lambda r: r.levelname,
             "@message": lambda r: r.getMessage(),
-            "@exception": lambda r: "".join(traceback.format_exception(*r.exc_info))
-            if r.exc_info
-            else None,
+            "@exception": lambda r: (
+                "".join(traceback.format_exception(*r.exc_info)) if r.exc_info else None
+            ),
             "@logger": lambda r: r.name,
             "@module": lambda r: r.module,
             "@file": lambda r: r.pathname,
@@ -122,11 +122,7 @@ class JsonFormatter(logging.Formatter):
         """
         out: dict[str, Any] = {}
         for k, v in rec.__dict__.items():
-            if (
-                k not in consumed
-                and not k.startswith("_")
-                and v is not None
-            ):
+            if k not in consumed and not k.startswith("_") and v is not None:
                 out[k] = self._json_safe(v)
         return out
 

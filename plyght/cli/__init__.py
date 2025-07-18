@@ -1,6 +1,3 @@
 from .async_context_object import AsyncContextObject
 
-
-__all__ = [
-    "AsyncContextObject"
-]
+__all__ = ["AsyncContextObject"]

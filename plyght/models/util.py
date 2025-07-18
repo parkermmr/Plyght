@@ -1,6 +1,6 @@
+from typing import Iterator, Type, get_args, get_origin
+
 from pydantic import BaseModel
-from typing import get_origin, get_args
-from typing import Iterator, Type
 
 
 def model_to_declarative_dict(model: BaseModel) -> dict:
@@ -10,6 +10,7 @@ def model_to_declarative_dict(model: BaseModel) -> dict:
     :param model: The pydantic @BaseModel to convert to a model dict.
     :return: Typed dictionary of model.
     """
+
     def get_field_type(field_annotation):
         """
         Validate and returns the field type annotation from a model field.
@@ -33,10 +34,7 @@ def model_to_declarative_dict(model: BaseModel) -> dict:
     return declarative_dict
 
 
-def required_fields(
-        model: Type[BaseModel],
-        recursive: bool = False
-        ) -> Iterator[str]:
+def required_fields(model: Type[BaseModel], recursive: bool = False) -> Iterator[str]:
     """
     Extracts the required fields from a model of depth >=1.
 

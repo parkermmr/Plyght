@@ -6,7 +6,6 @@ from .proxied_client import ProxiedClient
 from .redis_client import RedisClient
 from .s3_client import S3Client
 
-
 __all__ = [
     "KafkaClient",
     "Neo4jClient",
@@ -14,5 +13,5 @@ __all__ = [
     "PrometheusClient",
     "ProxiedClient",
     "RedisClient",
-    "S3Client"
+    "S3Client",
 ]

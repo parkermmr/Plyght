@@ -1,6 +1,7 @@
-import time
 import socket
-from confluent_kafka import Consumer, Producer, KafkaException, KafkaError
+import time
+
+from confluent_kafka import Consumer, KafkaError, KafkaException, Producer
 
 from plyght.config.auto import get_kwargs
 from plyght.config.clients.client import Client
@@ -108,7 +109,7 @@ class KafkaClient(Client):
                     503,
                     "Unhealthy",
                     "Cannot connect to producer at this stage."
-                    " Caused by unreachable server."
+                    " Caused by unreachable server.",
                 )
 
         if self.mode == "consume":
@@ -168,10 +169,10 @@ class KafkaClient(Client):
         """
         try:
             client.produce(
-                '__health__',
-                key='status',
+                "__health__",
+                key="status",
                 value=f"health-check-{socket.gethostname()}-{int(time.time())}",
-                callback=delivery_report
+                callback=delivery_report,
             )
             client.poll(0)
             client.flush(timeout=5)
@@ -187,11 +188,7 @@ class KafkaClient(Client):
         @param headers (dict): A bytes dictionary of kafka headers
         @returns dict: A simple dictionary of decoded string headers.
         """
-        return {
-            k: v.decode()
-            if isinstance(v, bytes) else v
-            for k, v in headers
-        }
+        return {k: v.decode() if isinstance(v, bytes) else v for k, v in headers}
 
     def _delivery_report(self, err, msg) -> None:
         """
@@ -249,10 +246,10 @@ class KafkaClient(Client):
                     for k, v in headers:
                         if k == key and v.decode() == value:
                             return {
-                                'topic': msg.topic(),
-                                'key': msg.key(),
-                                'value': msg.value(),
-                                'headers': headers
+                                "topic": msg.topic(),
+                                "key": msg.key(),
+                                "value": msg.value(),
+                                "headers": headers,
                             }
         finally:
             self._client.close()

@@ -5,12 +5,11 @@ from .proxied_client import AsyncProxiedClient
 from .redis_client import AsyncRedisClient
 from .s3_client import AsyncS3Client
 
-
 __all__ = [
     "AsyncKafkaClient",
     "AsyncNeo4jClient",
     "AsyncOpensearchClient",
     "AsyncProxiedClient",
     "AsyncRedisClient",
-    "AsyncS3Client"
+    "AsyncS3Client",
 ]

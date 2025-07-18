@@ -10,7 +10,7 @@ jobs:
   Lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: parkermmr/compendium/jobs/python/lint-flake8@v1
+      - uses: parkermmr/compendium/jobs/python/lint-flake8@main
         with:
           python-version: "3.10"
           src-directory: "plyght"
