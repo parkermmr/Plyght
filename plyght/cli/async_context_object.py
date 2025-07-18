@@ -1,0 +1,2 @@
+class AsyncContextObject:
+    pass

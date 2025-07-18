@@ -1,0 +1,2 @@
+class AsyncProxiedClient:
+    pass

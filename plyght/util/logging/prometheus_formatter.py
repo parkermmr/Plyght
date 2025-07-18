@@ -1,0 +1,2 @@
+class PrometheusFormatter:
+    pass

@@ -10,7 +10,7 @@ import os
 from functools import wraps
 from logging import Logger as BaseLogger
 from typing import Any, Optional
-
+from plyght.util.logging.json_formatter import JsonFormatter
 from plyght.util.logging.formatter import Formatter
 
 
@@ -25,6 +25,15 @@ class Logger(BaseLogger):
     :param logfile: Optional log file name/path. Defaults to 'application.log'.
     :param colored: Whether log output should use colored formatting. Defaults to False.
     """
+    LOG_SCHEMA = {
+        "ts": "@time",
+        "level": "@level",
+        "msg": "@message",
+        "trace": "@exception",
+        "module": "@module",
+        "logger": "@logger",
+        "@all": None,
+    }
 
     LOG_FILE = "application.log"
 
@@ -48,7 +57,7 @@ class Logger(BaseLogger):
         if not self.hasHandlers():
             if logfile:
                 file_handler = logging.FileHandler(logfile)
-                file_handler.setFormatter(Formatter(colored=False))
+                file_handler.setFormatter(JsonFormatter(schema=self.LOG_SCHEMA))
                 self.addHandler(file_handler)
 
             stream_handler = logging.StreamHandler()
@@ -199,3 +208,7 @@ def log_exceptions(logger: BaseLogger = None):
         return decorator(func)
 
     return decorator
+
+
+mylogger = Logger(__name__)
+mylogger.info("Trying new message...")

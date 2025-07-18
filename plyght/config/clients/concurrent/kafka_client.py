@@ -1,0 +1,2 @@
+class AsyncKafkaClient:
+    pass

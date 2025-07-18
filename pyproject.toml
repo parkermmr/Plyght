@@ -23,7 +23,9 @@ dependencies = [
     "neo4j>=5.28.1; extra == 'neo4j'",
     "kafka-python>=2.1.3; extra == 'kafka'",
     "boto3>=1.37.20; extra == 'boto'",
-    "async-property (>=0.2.2,<0.3.0)"
+    "async-property (>=0.2.2,<0.3.0)",
+    "confluent-kafka (>=2.10.0,<3.0.0)",
+    "python-json-logger (>=3.3.0,<4.0.0)"
 ]
 
 keywords = ["python", "utility", "modern", "neo4j", "kafka", "opensearch", "s3"]

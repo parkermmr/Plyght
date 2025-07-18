@@ -19,15 +19,19 @@ def invoke(*dargs, **dkwargs):
     the decorated function once. Otherwise, it calls the function using the
     given decorator arguments.
 
-    Usage:
+    #### Usage:
+
+        ```
         @invoke
         def some_function():
             print("Called immediately")
-
-        # Or with arguments:
+        ```
+        </br>
+        ```
         @invoke("arg1", key="value")
         def another_function(arg1, key=None):
             print(f"{arg1}, {key}")
+        ```
     """
     if len(dargs) == 1 and callable(dargs[0]) and not dkwargs:
         func = dargs[0]
@@ -48,16 +52,18 @@ def deprecated(reason):
     a string providing the reason for deprecation, or be applied directly
     to a function or class.
 
-    Usage:
-        # With a reason:
+    #### Usage:
+        ```
         @deprecated("Use the new_function instead.")
         def old_function():
             pass
-
-        # Without a reason (using directly):
+        ```
+        </br>
+        ```
         @deprecated
         def another_old_function():
             pass
+        ```
 
     :param reason: Either a string describing why the entity is deprecated,
                    or the function/class being marked as deprecated.
