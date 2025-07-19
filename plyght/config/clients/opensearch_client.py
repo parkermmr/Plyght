@@ -122,4 +122,7 @@ class OpensearchClient(Client):
         """
         Terminate the connection to OpenSearch.
         """
+        if not self._client:
+            return
+        self._client.close()
         self._client = None
