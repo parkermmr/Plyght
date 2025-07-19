@@ -112,9 +112,9 @@ poetry install "[neo4j,kafka,...]"
 ### Compendium CI
 The current workflow being used is a Compendium CI Python Poetry pipeline with comprehensive checks for testing, linting, style, code security and structure. Compendium is a GitHub specific CI suite fully managed [here][compendium]. It is important that before any pushes are made the code quality checks and reformatting are ran. This can be done with the following commands:
 ```bash
-poetry run black plyght && poetry run isort plyght
+poetry run black plyght
 ```
-This will ensure the pipeline completes successfully and all code is to an appropriate format standard. For more information on the linting configuration seek out the `pyproject.toml` configuration under `[tools.black]` & `[tools.isort]` as well as the `.flake8` configuration file.
+This will ensure the pipeline completes successfully and all code is to an appropriate format standard. For more information on the linting configuration seek out the `pyproject.toml` configuration under `[tools.black]` as well as the `.flake8` configuration file.
 
 ### Acknowledgments:
 
