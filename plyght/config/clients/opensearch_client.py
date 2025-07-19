@@ -1,11 +1,3 @@
-"""
-Provides an OpenSearch client wrapper that integrates Plyght logging and
-exception handling. The class is intended for use as a base class where
-configuration can be injected via decorators. It includes explicit
-methods for connecting and disconnecting, along with property-based
-status checking and host retrieval.
-"""
-
 try:
     from opensearchpy import OpenSearch
 except ImportError:
@@ -43,10 +35,11 @@ class OpensearchClient(Client):
     @property
     def client(self) -> OpenSearch:
         """
-        Explicitly returns client, opposed to implicity returning client
+        Explicitly returns client, opposed to implicitly returning client
         through the constructor.
 
         :return: OpenSearch instance of client.
+        :raises ConnectionException: If not yet connected.
         """
         if not self._client:
             raise ConnectionException(
@@ -63,13 +56,20 @@ class OpensearchClient(Client):
         Return a boolean based on the connection instantiation status of Opensearch.
         I.e. if client is connected return True else False.
 
-        :return: Boolean of connection state.
+        :returns bool: Boolean of connection state.
         """
         if not self._client:
             self.logger.warning("No active connection to Opensearch is established.")
             return False
 
-        return True
+        try:
+            alive = self._client.ping()
+            if not alive:
+                self.logger.warning("Opensearch ping returned False.")
+            return alive
+        except Exception as e:
+            self.logger.warning(f"Opensearch ping failed: {e}")
+            return False
 
     @property
     def host(self) -> str | None:
@@ -77,7 +77,7 @@ class OpensearchClient(Client):
         Return a string of host URLs. E.g. "https://localhost:9200"
         or "http://localhost:9200, http://localhost:9201".
 
-        :return: String of host URLs or None if no hosts are configured.
+        :returns str: String of host URLs or None if no hosts are configured.
         """
         ssl = self._config.get("use_ssl", False)
         scheme = "https" if ssl else "http"
@@ -109,8 +109,7 @@ class OpensearchClient(Client):
 
         self._client = OpenSearch(**self._config)
 
-        instance = self._client.ping()
-        if not instance:
+        if not self._client.ping():
             raise ConnectionException(
                 500,
                 "InvalidConfiguration",

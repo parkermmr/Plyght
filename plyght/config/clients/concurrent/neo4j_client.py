@@ -27,6 +27,7 @@ class AsyncNeo4jClient(AsyncClient):
     def __init__(self, uri: str = None, auth: tuple[str, str] = None, **kwargs) -> None:
         """
         Initialize the AsyncNeo4jClient.
+
         :param uri: Bolt URI, e.g. "bolt://localhost:7687"
         :param auth: Tuple of (username, password)
         """
