@@ -1,7 +1,11 @@
+from typing import Any
 from requests import Session
 from ssl import create_default_context, SSLContext, CERT_NONE
 from requests.adapters import HTTPAdapter
+
+from urllib.parse import urlencode
 from urllib3.poolmanager import PoolManager
+
 from plyght.config.clients.client import Client
 from plyght.config.clients.exceptions import ConnectionException
 from plyght.util.logging.logger import Logger
@@ -98,6 +102,21 @@ class ProxiedClient(Client):
         self.proxy = proxy
         self.proxy_auth = proxy_auth
         self._session: Session | None = None
+
+    def _build_url(self, endpoint: str, params: dict[str, Any] | None = None) -> str:
+        """
+        Construct a full URL by joining host and endpoint, and URL-encode query params.
+
+        :param endpoint: Path to append to the base host URL.
+        :param params: Dictionary of query parameters.
+        :return: Fully qualified URL.
+        """
+        base = self.host.rstrip('/')
+        path = endpoint.lstrip('/')
+        url = f"{base}/{path}"
+        if params:
+            url = f"{url}?{urlencode(params)}"
+        return url
 
     @property
     def host(self) -> str:
