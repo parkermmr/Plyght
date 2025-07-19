@@ -17,7 +17,7 @@ except ImportError:
 from plyght.config.auto import get_kwargs
 from plyght.config.clients.client import Client
 from plyght.config.clients.exceptions import ConnectionException
-from plyght.util.logging.logger import Logger, log_exceptions
+from plyght.util.logging.logger import Logger
 
 
 class OpensearchClient(Client):
@@ -41,7 +41,6 @@ class OpensearchClient(Client):
         self._client = None
 
     @property
-    @log_exceptions
     def client(self) -> OpenSearch:
         """
         Explicitly returns client, opposed to implicity returning client
@@ -98,7 +97,6 @@ class OpensearchClient(Client):
 
         return ", ".join(results)
 
-    @log_exceptions
     def connect(self) -> None:
         """
         Explicit connection method for Opensearch rather than implicitly through the
