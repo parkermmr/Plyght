@@ -48,7 +48,7 @@ class AsyncNeo4jClient(AsyncClient):
             raise ConnectionException(
                 404,
                 "NoConnectionFound",
-                "Async connection to Neo4j not yet established; call connect()."
+                "Async connection to Neo4j not yet established; call connect().",
             )
         return self._client
 
@@ -95,7 +95,7 @@ class AsyncNeo4jClient(AsyncClient):
             raise ConnectionException(
                 500,
                 "InvalidConfiguration",
-                "Async connection to Neo4j cannot be established."
+                "Async connection to Neo4j cannot be established.",
             )
 
     async def disconnect(self) -> None:
@@ -124,7 +124,7 @@ class AsyncNeo4jClient(AsyncClient):
             raise ConnectionException(
                 404,
                 "NoConnectionFound",
-                "Async connection to Neo4j not yet established; call connect()."
+                "Async connection to Neo4j not yet established; call connect().",
             )
         async with self._client.session() as session:
             tx = await session.begin_transaction()
@@ -153,7 +153,7 @@ class AsyncNeo4jClient(AsyncClient):
             raise ConnectionException(
                 404,
                 "NoConnectionFound",
-                "Async connection to Neo4j not yet established; call connect()."
+                "Async connection to Neo4j not yet established; call connect().",
             )
         cypher = "CALL n10s.rdf.export.cypher($query, $config)"
         return await self.execute_safe_query(

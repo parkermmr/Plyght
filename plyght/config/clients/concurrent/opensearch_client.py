@@ -49,7 +49,7 @@ class AsyncOpensearchClient(AsyncClient):
                 404,
                 "NoConnectionFound",
                 "Async connection to Opensearch not yet established; "
-                "call AsyncOpensearchClient.connect()."
+                "call AsyncOpensearchClient.connect().",
             )
         return self._client
 
@@ -91,7 +91,9 @@ class AsyncOpensearchClient(AsyncClient):
         for h in hosts_data:
             prefix = h.get("url_prefix", "").strip("/")
             net = f"{h['host']}:{h['port']}"
-            parts.append(f"{scheme}://{net}/{prefix}" if prefix else f"{scheme}://{net}")
+            parts.append(
+                f"{scheme}://{net}/{prefix}" if prefix else f"{scheme}://{net}"
+            )
         return ", ".join(parts)
 
     async def connect(self) -> None:
@@ -110,7 +112,7 @@ class AsyncOpensearchClient(AsyncClient):
                 500,
                 "InvalidConfiguration",
                 "Async connection to Opensearch cannot be established; "
-                "invalid config or unreachable host."
+                "invalid config or unreachable host.",
             )
 
     async def disconnect(self) -> None:
