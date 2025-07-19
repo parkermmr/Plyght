@@ -1,4 +1,5 @@
 from typing import Any
+from time import perf_counter
 from requests import Session
 from ssl import create_default_context, SSLContext, CERT_NONE
 from requests.adapters import HTTPAdapter
@@ -9,6 +10,7 @@ from urllib3.poolmanager import PoolManager
 from plyght.config.clients.client import Client
 from plyght.config.clients.exceptions import ConnectionException
 from plyght.util.logging.logger import Logger
+from plyght.core.structures import Response
 
 
 class SSLAdapter(HTTPAdapter):
@@ -28,11 +30,7 @@ class SSLAdapter(HTTPAdapter):
         self.ssl_context = ssl_context
 
     def init_poolmanager(
-        self,
-        connections: int,
-        maxsize: int,
-        block: bool = False,
-        **pool_kwargs
+        self, connections: int, maxsize: int, block: bool = False, **pool_kwargs
     ):
         """
         Create and initialize the urllib3 PoolManager with the custom SSL context.
@@ -42,12 +40,9 @@ class SSLAdapter(HTTPAdapter):
         :param block: Whether the pool should block for connections.
         :param pool_kwargs: Additional keyword arguments for PoolManager.
         """
-        pool_kwargs['ssl_context'] = self.ssl_context
+        pool_kwargs["ssl_context"] = self.ssl_context
         self.poolmanager = PoolManager(
-            num_pools=connections,
-            maxsize=maxsize,
-            block=block,
-            **pool_kwargs
+            num_pools=connections, maxsize=maxsize, block=block, **pool_kwargs
         )
 
 
@@ -111,8 +106,8 @@ class ProxiedClient(Client):
         :param params: Dictionary of query parameters.
         :return: Fully qualified URL.
         """
-        base = self.host.rstrip('/')
-        path = endpoint.lstrip('/')
+        base = self.host.rstrip("/")
+        path = endpoint.lstrip("/")
         url = f"{base}/{path}"
         if params:
             url = f"{url}?{urlencode(params)}"
@@ -137,7 +132,7 @@ class ProxiedClient(Client):
             raise ConnectionException(
                 404,
                 "NoConnectionFound",
-                "HTTP session not yet established; call connect() first."
+                "HTTP session not yet established; call connect() first.",
             )
         return self._session
 
@@ -167,9 +162,7 @@ class ProxiedClient(Client):
             ctx.verify_mode = CERT_NONE
         if self.cert and self.key:
             ctx.load_cert_chain(
-                certfile=self.cert,
-                keyfile=self.key,
-                password=self.key_password
+                certfile=self.cert, keyfile=self.key, password=self.key_password
             )
         return ctx
 
@@ -185,7 +178,7 @@ class ProxiedClient(Client):
         sess = Session()
         ctx = self.ssl_context()
         if ctx:
-            sess.mount('https://', SSLAdapter(ctx))
+            sess.mount("https://", SSLAdapter(ctx))
         else:
             sess.verify = self.verify
         if self.auth:
@@ -193,9 +186,11 @@ class ProxiedClient(Client):
         if self.proxy:
             proxy_url = self.proxy
             if self.proxy_auth:
-                scheme, rest = proxy_url.split('://', 1)
-                proxy_url = f'{scheme}://{self.proxy_auth[0]}:{self.proxy_auth[1]}@{rest}'
-            sess.proxies = {'http': proxy_url, 'https': proxy_url}
+                scheme, rest = proxy_url.split("://", 1)
+                proxy_url = (
+                    f"{scheme}://{self.proxy_auth[0]}:{self.proxy_auth[1]}@{rest}"
+                )
+            sess.proxies = {"http": proxy_url, "https": proxy_url}
         self._session = sess
 
     def disconnect(self) -> None:
@@ -207,3 +202,134 @@ class ProxiedClient(Client):
         self.logger.info("Closing HTTP session")
         self._session.close()
         self._session = None
+
+    def get(
+        self, endpoint: str, params: dict[str, Any] | None = None, **kwargs
+    ) -> Response:
+        """
+        Issue a GET request to the specified endpoint.
+
+        :param endpoint: Path to append to the base host URL.
+        :param params: Query parameters to URL-encode.
+        :param kwargs: Passed to Session.get().
+        :return: Response with status, content, headers, and response time.
+        """
+        self.connect()
+        url = self._build_url(endpoint, params)
+        start = perf_counter()
+        resp = self.client.get(url, **kwargs)
+        elapsed = perf_counter() - start
+        return Response(
+            status=resp.status_code,
+            content=resp.content,
+            headers=dict(resp.headers),
+            response_time=elapsed,
+        )
+
+    def head(
+        self, endpoint: str, params: dict[str, Any] | None = None, **kwargs
+    ) -> Response:
+        """
+        Issue a HEAD request to the specified endpoint.
+        """
+        self.connect()
+        url = self._build_url(endpoint, params)
+        start = perf_counter()
+        resp = self.client.head(url, **kwargs)
+        elapsed = perf_counter() - start
+        return Response(
+            status=resp.status_code,
+            content=resp.content,
+            headers=dict(resp.headers),
+            response_time=elapsed,
+        )
+
+    def post(
+        self, endpoint: str, params: dict[str, Any] | None = None, **kwargs
+    ) -> Response:
+        """
+        Issue a POST request to the specified endpoint.
+        """
+        self.connect()
+        url = self._build_url(endpoint, params)
+        start = perf_counter()
+        resp = self.client.post(url, **kwargs)
+        elapsed = perf_counter() - start
+        return Response(
+            status=resp.status_code,
+            content=resp.content,
+            headers=dict(resp.headers),
+            response_time=elapsed,
+        )
+
+    def put(
+        self, endpoint: str, params: dict[str, Any] | None = None, **kwargs
+    ) -> Response:
+        """
+        Issue a PUT request to the specified endpoint.
+        """
+        self.connect()
+        url = self._build_url(endpoint, params)
+        start = perf_counter()
+        resp = self.client.put(url, **kwargs)
+        elapsed = perf_counter() - start
+        return Response(
+            status=resp.status_code,
+            content=resp.content,
+            headers=dict(resp.headers),
+            response_time=elapsed,
+        )
+
+    def patch(
+        self, endpoint: str, params: dict[str, Any] | None = None, **kwargs
+    ) -> Response:
+        """
+        Issue a PATCH request to the specified endpoint.
+        """
+        self.connect()
+        url = self._build_url(endpoint, params)
+        start = perf_counter()
+        resp = self.client.patch(url, **kwargs)
+        elapsed = perf_counter() - start
+        return Response(
+            status=resp.status_code,
+            content=resp.content,
+            headers=dict(resp.headers),
+            response_time=elapsed,
+        )
+
+    def delete(
+        self, endpoint: str, params: dict[str, Any] | None = None, **kwargs
+    ) -> Response:
+        """
+        Issue a DELETE request to the specified endpoint.
+        """
+        self.connect()
+        url = self._build_url(endpoint, params)
+        start = perf_counter()
+        resp = self.client.delete(url, **kwargs)
+        elapsed = perf_counter() - start
+        return Response(
+            status=resp.status_code,
+            content=resp.content,
+            headers=dict(resp.headers),
+            response_time=elapsed,
+        )
+
+    def options(
+        self, endpoint: str, params: dict[str, Any] | None = None, **kwargs
+    ) -> Response:
+        """
+        Issue a OPTIONS request to the specified endpoint.
+        """
+        self.connect()
+        url = self._build_url(endpoint, params)
+        start = perf_counter()
+        resp = self.client.options(url, **kwargs)
+        elapsed = perf_counter() - start
+        return Response(
+            status=resp.status_code,
+            content=resp.content,
+            headers=dict(resp.headers),
+            response_time=elapsed,
+        )

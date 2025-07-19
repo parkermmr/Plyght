@@ -12,6 +12,7 @@ class Response:
         headers: Response headers.
         response_time: Time taken to complete the request, in seconds.
     """
+
     status: int
     content: bytes
     headers: dict[str, str]
