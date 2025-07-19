@@ -1,7 +1,7 @@
 """
-Defines an abstract async client class that provides a core interface for client wrappers.
-Subclasses must implement the connection handling methods and reference an underlying
-client object.
+Defines an abstract async client class that provides a core interface for client
+wrappers. Subclasses must implement the connection handling methods and reference
+an underlying client object.
 """
 
 from abc import ABC, abstractmethod
